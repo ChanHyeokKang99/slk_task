@@ -135,8 +135,8 @@ export default function OrgMessageSettings() {
   const hasErrors = Object.values(fieldErrors).some(Boolean);
 
   return (
-    <div style={s.page}>
-      <div style={s.pageHeader}>
+    <div className="page-wrap" style={s.page}>
+      <div className="page-header-row" style={s.pageHeader}>
         <div>
           <h1 style={s.pageTitle}>문자 발송 업체 설정</h1>
           <p style={s.pageDesc}>발송에 사용할 업체와 API 키를 설정합니다.</p>
@@ -215,7 +215,7 @@ function CurrentStatusPill({ org }) {
 
 function StepBar({ steps, current, onStepClick }) {
   return (
-    <div style={s.stepBar}>
+    <div className="step-bar">
       {steps.map((label, i) => {
         const done = i < current;
         const active = i === current;
@@ -230,10 +230,10 @@ function StepBar({ steps, current, onStepClick }) {
             }}>
               {done ? "✓" : i + 1}
             </div>
-            <span style={{ ...s.stepLabel, color: active ? "#1D4ED8" : done ? "#3B82F6" : "#94A3B8", fontWeight: active ? 700 : 400 }}>
+            <span className="step-label-text" style={{ ...s.stepLabel, color: active ? "#1D4ED8" : done ? "#3B82F6" : "#94A3B8", fontWeight: active ? 700 : 400 }}>
               {label}
             </span>
-            {i < steps.length - 1 && <div style={{ ...s.stepLine, background: done ? "#3B82F6" : "#E2E8F0" }} />}
+            {i < steps.length - 1 && <div className="step-line" style={{ background: done ? "#3B82F6" : "#E2E8F0" }} />}
           </div>
         );
       })}
@@ -245,7 +245,7 @@ function ProviderStep({ selectedProvider, currentProvider, onSelect }) {
   return (
     <div style={s.card}>
       <p style={s.cardDesc}>사용할 문자 발송 업체를 선택하세요. 업체마다 필요한 API 키 항목이 다릅니다.</p>
-      <div style={s.providerGrid}>
+      <div className="provider-grid">
         {Object.entries(providerConfig).map(([key, cfg]) => {
           const isSelected = selectedProvider === key;
           const isCurrent = currentProvider === key;
@@ -332,7 +332,7 @@ function KeyInputStep({ provider, formValues, fieldErrors, touched, revealed, is
         })}
       </div>
 
-      <div style={s.actions}>
+      <div className="step-actions">
         <button style={s.ghostBtn} onClick={onBack}>← 업체 다시 선택</button>
         <button
           style={{ ...s.primaryBtn, opacity: allFilled && !hasErrors ? 1 : 0.45, cursor: allFilled && !hasErrors ? "pointer" : "not-allowed" }}
@@ -429,7 +429,7 @@ function TestStep({ provider, formValues, testStatus, testErrCode, onBack, onTes
             ))}
           </div>
           <div style={s.errCodeRow}>에러 코드: <code style={s.errCode}>{testErrCode}</code></div>
-          <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+          <div className="fail-actions">
             <button style={s.ghostBtn} onClick={onBack}>← 키 수정하기</button>
             <button style={{ ...s.primaryBtn, background: "#EF4444" }} onClick={onTest}>다시 테스트</button>
           </div>
@@ -441,8 +441,8 @@ function TestStep({ provider, formValues, testStatus, testErrCode, onBack, onTes
 
 function ChangeModal({ from, to, pendingCount, onCancel, onConfirm }) {
   return (
-    <div style={s.overlay}>
-      <div style={s.modal}>
+    <div className="modal-overlay" style={s.overlay}>
+      <div className="modal-box" style={s.modal}>
         <div style={s.modalBanner}>⚠ 업체 변경 전 확인하세요</div>
         <div style={s.modalBody}>
           <div style={s.changeRow}>
@@ -483,14 +483,14 @@ function Toast({ msg }) {
 // ── 스타일 ────────────────────────────────────────────
 
 const s = {
-  page: { padding: "36px 40px", maxWidth: 660 },
-  pageHeader: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 },
+  page: { maxWidth: 660 },
+  pageHeader: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 },
   pageTitle: { fontSize: 22, fontWeight: 700, color: "#0F172A", margin: 0 },
   pageDesc: { fontSize: 13, color: "#64748B", margin: "4px 0 0" },
   pill: { display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, padding: "6px 14px", borderRadius: 20 },
   pillDot: { width: 7, height: 7, borderRadius: "50%", background: "#22C55E", display: "inline-block" },
 
-  stepBar: { display: "flex", alignItems: "center", marginBottom: 28 },
+  stepBar: { display: "flex", alignItems: "center", marginBottom: 28, overflowX: "auto" },
   stepItem: { display: "flex", alignItems: "center", gap: 8 },
   stepCircle: { width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, transition: "all 0.2s" },
   stepLabel: { fontSize: 13, whiteSpace: "nowrap" },
@@ -503,7 +503,7 @@ const s = {
   cardTopTitle: { fontSize: 16, fontWeight: 700, color: "#0F172A", flex: 1 },
   docsLink: { fontSize: 12, color: "#3B82F6", textDecoration: "none" },
 
-  providerGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
+  providerGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }, // fallback (CSS class overrides on mobile)
   providerCard: { border: "2px solid", borderRadius: 12, padding: 20, cursor: "pointer", textAlign: "left", position: "relative", transition: "all 0.15s" },
   currentTag: { position: "absolute", top: 10, right: 10, background: "#DBEAFE", color: "#1D4ED8", fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20 },
   providerEmoji: { fontSize: 28, marginBottom: 8 },
@@ -523,7 +523,7 @@ const s = {
   errMsg: { display: "flex", gap: 5, fontSize: 12, color: "#DC2626", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "6px 10px" },
   hintMsg: { fontSize: 12, color: "#94A3B8" },
 
-  actions: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 28, paddingTop: 20, borderTop: "1px solid #F1F5F9" },
+  actions: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 28, paddingTop: 20, borderTop: "1px solid #F1F5F9", gap: 10 }, // used as fallback
   bottomNote: { textAlign: "center", fontSize: 12, color: "#94A3B8", margin: "10px 0 0" },
 
   summary: { background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 10, padding: "14px 18px", marginBottom: 24 },
