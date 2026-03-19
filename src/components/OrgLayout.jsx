@@ -1,0 +1,128 @@
+import { NavLink } from "react-router-dom";
+import { currentOrg } from "../data/mockData";
+
+const navItems = [
+  { path: "/", icon: "📊", label: "발송 현황" },
+  { path: "/message-settings", icon: "🔑", label: "문자 업체 설정" },
+  { path: "/members", icon: "👥", label: "멤버 관리" },
+  { path: "/billing", icon: "💳", label: "요금 · 정산" },
+];
+
+export default function OrgLayout({ children }) {
+  return (
+    <div style={s.root}>
+      <aside style={s.sidebar}>
+        {/* 조직 정보 */}
+        <div style={s.orgBlock}>
+          <div style={s.orgAvatar}>{currentOrg.name[0]}</div>
+          <div>
+            <div style={s.orgName}>{currentOrg.name}</div>
+            <div style={s.orgPlan}>{currentOrg.plan} 플랜</div>
+          </div>
+        </div>
+
+        <nav style={s.nav}>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.path === "/"}
+              style={({ isActive }) => ({
+                ...s.navItem,
+                ...(isActive ? s.navActive : {}),
+              })}
+            >
+              <span style={s.navIcon}>{item.icon}</span>
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* 관리자 정보 */}
+        <div style={s.adminBlock}>
+          <div style={s.adminAvatar}>{currentOrg.adminName[0]}</div>
+          <div>
+            <div style={s.adminName}>{currentOrg.adminName}</div>
+            <div style={s.adminEmail}>{currentOrg.adminEmail}</div>
+          </div>
+        </div>
+      </aside>
+
+      <main style={s.main}>{children}</main>
+    </div>
+  );
+}
+
+const s = {
+  root: { display: "flex", minHeight: "100vh", background: "#F8FAFC" },
+  sidebar: {
+    width: 224,
+    background: "#0F172A",
+    display: "flex",
+    flexDirection: "column",
+    flexShrink: 0,
+  },
+  orgBlock: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "22px 18px",
+    borderBottom: "1px solid #1E293B",
+  },
+  orgAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    background: "#3B82F6",
+    color: "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: 700,
+    fontSize: 16,
+    flexShrink: 0,
+  },
+  orgName: { color: "#F1F5F9", fontSize: 13, fontWeight: 700, lineHeight: 1.3 },
+  orgPlan: { color: "#475569", fontSize: 11, marginTop: 2 },
+  nav: { flex: 1, padding: "10px 0" },
+  navItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "11px 18px",
+    color: "#64748B",
+    textDecoration: "none",
+    fontSize: 14,
+    fontWeight: 500,
+    borderLeft: "3px solid transparent",
+    transition: "all 0.12s",
+  },
+  navActive: {
+    color: "#F1F5F9",
+    background: "#1E293B",
+    borderLeft: "3px solid #3B82F6",
+  },
+  navIcon: { fontSize: 15, width: 20, textAlign: "center" },
+  adminBlock: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "14px 18px",
+    borderTop: "1px solid #1E293B",
+  },
+  adminAvatar: {
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    background: "#334155",
+    color: "#94A3B8",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: 700,
+    fontSize: 13,
+    flexShrink: 0,
+  },
+  adminName: { color: "#94A3B8", fontSize: 12, fontWeight: 600 },
+  adminEmail: { color: "#475569", fontSize: 11 },
+};
